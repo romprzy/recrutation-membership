@@ -1,0 +1,59 @@
+.v-application--is-ltr .v-text-field .v-input__append-inner {
+  padding-left: 0 !important;
+  margin: 0 !important;
+  align-self: auto !important;
+}
+
+.v-text-field {
+  &.v-text-field--outlined{
+    &.basic-text-field, &.basic-select {
+      fieldset {
+        border-color: #C8D3DB;
+      }
+    }
+  }
+}
+
+.delete-button.v-btn--outlined {
+  border: 2px solid #C8D3DB;
+  background: #eeeeee;
+}
+
+.label-text {
+  //color: #394556;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+
+.phone-input-wrapper {
+  .v-select, .v-btn {
+    font-weight: bold !important;
+  }
+}
+
+.input-phone {
+  position: relative;
+
+  .v-select {
+    position: absolute;
+    z-index: 1;
+    width: 100px;
+
+    fieldset {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .v-input__append-inner {
+      width: 12px;
+    }
+  }
+
+  .basic-text-field {
+    .v-input__slot {
+      padding-left: 110px !important;
+    }
+  }
+}
