@@ -15,7 +15,11 @@ export default {
       addPhone: 'Add phone',
       delete: 'Delete',
       continue: 'Continue',
+      back: 'Back',
+      save: 'Save',
+      membership: 'Membership',
     },
+    close: 'Close',
   },
   pages: {
     signIn: {
@@ -24,9 +28,11 @@ export default {
       },
       membership: {
         title: 'Membership',
+        regular: 'Regular',
+        premium: 'Premium',
       },
       overview: {
-        title: 'Overview',
+        title: 'Edit information',
       },
     },
   },

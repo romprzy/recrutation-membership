@@ -11,8 +11,9 @@ export interface Phone {
 }
 
 export type FormPersonal = {
-  firstname: FormFieldName
-  lastname: FormFieldName
-  email: FormFieldName
+  firstname: string
+  lastname: string
+  email: string
   phones: Phone[]
+  membership: 'personal' | 'premium'
 }

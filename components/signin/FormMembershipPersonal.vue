@@ -63,13 +63,15 @@
       <a @click.prevent="addPhone">{{ $vuetify.lang.t('$vuetify.components.forms.addPhone') }}</a>
     </div>
 
-    <BasicButton
-      block
-      dark
-      x-large
-      class="primary mt-8 mb-4"
-      type="submit"
-    >{{ $vuetify.lang.t('$vuetify.components.forms.continue') }}</BasicButton>
+    <slot name="submit">
+      <BasicButton
+        block
+        dark
+        x-large
+        class="primary mt-8 mb-4"
+        type="submit"
+      >{{ $vuetify.lang.t('$vuetify.components.forms.continue') }}</BasicButton>
+    </slot>
   </VForm>
 </template>
 
@@ -78,11 +80,13 @@ import InputPhone from '@/components/elements/InputPhone.vue'
 import BasicTextField from '@/components/elements/BasicTextField.vue'
 import BasicButton from '@/components/elements/BasicButton.vue'
 import BasicSelect from '@/components/elements/BasicSelect.vue'
-import {PHONE_TYPES, Phone, FormPersonal, PhoneType, FormFieldName} from '~/types'
+import {PHONE_TYPES, Phone, FormPersonal, PhoneType, FormFieldName, FORM_FIELDS_NAMES} from '~/types'
 import { Validatable } from '~/types/validation'
 import Vue from 'vue'
+import {loadItemFromStorage, saveItemToStorage} from '~/helpers'
 
 interface Data {
+  itemsLoaded: boolean
   form: FormPersonal
   errorMessages: any
 }
@@ -97,6 +101,7 @@ export default Vue.extend({
   },
   data(): Data {
     return {
+      itemsLoaded: false,
       // TODO: check why ts is not validating
       form: {
         firstname: '',
@@ -108,6 +113,7 @@ export default Vue.extend({
             number: '',
           }
         ],
+        membership: 'personal',
       },
       errorMessages: {
         firstname: [],
@@ -153,7 +159,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    phonesSelectItems(selectedType): object[] {
+    phonesSelectItems(selectedType: PhoneType): object[] {
       return PHONE_TYPES.map(type => ({
         value: type,
         text: this.$vuetify.lang.t(`$vuetify.components.forms.phones.${type}`),
@@ -201,8 +207,7 @@ export default Vue.extend({
     },
     onSubmit(): void {
       let valid = true
-      const fieldNames: keyof typeof FormPersonal[] = ['firstname', 'lastname', 'email']
-      fieldNames.forEach(fieldName => {
+      FORM_FIELDS_NAMES.forEach(fieldName => {
         const isValid = this.validate(fieldName)
         if (!isValid) valid = false
       })
@@ -220,6 +225,24 @@ export default Vue.extend({
         .catch(error => {
           console.error(error)
         })
+    },
+  },
+  created() {
+    if (process.client) {
+      const savedForm = loadItemFromStorage('formMembershipPersonal')
+      // @ts-ignore
+      this.form = savedForm
+    }
+    this.itemsLoaded = true
+  },
+  watch: {
+    form: {
+      deep: true,
+      handler: function() {
+        if(process.client && this.itemsLoaded) {
+          saveItemToStorage('formMembershipPersonal', JSON.stringify(this.form))
+        }
+      },
     },
   },
 })
