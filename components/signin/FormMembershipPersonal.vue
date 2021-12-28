@@ -172,11 +172,13 @@ export default Vue.extend({
       this.form.phones.splice(index, 1)
     },
     validate(fieldName: FormFieldName) {
-      this.errorMessages[fieldName] = this.getErrorMessages({
+      const errorMessages = this.getErrorMessages({
         value: this.form[fieldName],
         label: this.$vuetify.lang.t(`$vuetify.components.forms.${fieldName}`),
         validators: this.validators[fieldName],
       })
+      this.errorMessages[fieldName] = errorMessages
+      return !errorMessages.length
     },
     getErrorMessages({value, label, validators}: Validatable) {
       const errors = []
@@ -186,26 +188,28 @@ export default Vue.extend({
 
       if (validators.required && stringValue.trim() === '')
         errors.push(this.$vuetify.lang.t('$vuetify.validations.required', fieldName))
-      if (validators.minLength && stringValue.length >= validators.minLength)
-        errors.push(this.$vuetify.lang.t('$vuetify.validations.minLength', fieldName, stringValue.length))
-      if (validators.maxLength && stringValue.length <= validators.maxLength)
-        errors.push(this.$vuetify.lang.t('$vuetify.validations.maxLength', fieldName, stringValue.length))
-      if (validators.min !== undefined && numberValue >= validators.min)
-        errors.push(this.$vuetify.lang.t('$vuetify.validations.min', fieldName, numberValue))
-      if (validators.max !== undefined && numberValue <= validators.max)
-        errors.push(this.$vuetify.lang.t('$vuetify.validations.max', fieldName, numberValue))
+      if (validators.minLength && stringValue.length < validators.minLength)
+        errors.push(this.$vuetify.lang.t('$vuetify.validations.minLength', fieldName, validators.minLength))
+      if (validators.maxLength && stringValue.length > validators.maxLength)
+        errors.push(this.$vuetify.lang.t('$vuetify.validations.maxLength', fieldName, validators.maxLength))
+      if (validators.min !== undefined && numberValue < validators.min)
+        errors.push(this.$vuetify.lang.t('$vuetify.validations.min', fieldName, validators.min))
+      if (validators.max !== undefined && numberValue > validators.max)
+        errors.push(this.$vuetify.lang.t('$vuetify.validations.max', fieldName, validators.max))
 
       return errors
     },
     onSubmit(): void {
+      let valid = true
       const fieldNames: keyof typeof FormPersonal[] = ['firstname', 'lastname', 'email']
       fieldNames.forEach(fieldName => {
-        this.$set(this.errorMessages, fieldName, this.getErrorMessages({
-          value: this.form[fieldName],
-          label: this.$vuetify.lang.t(`$vuetify.components.forms.${fieldName}`),
-          validators: this.validators[fieldName]
-        }))
+        const isValid = this.validate(fieldName)
+        if (!isValid) valid = false
       })
+
+      if (valid) {
+        this.addUser()
+      }
     },
     addUser() {
       this.$axios.post('http://httpbin.org/post', this.form)
