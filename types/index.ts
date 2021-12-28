@@ -1,27 +1,7 @@
-export const PHONE_TYPES = ['home', 'work', 'mobile', 'main', 'other'] as const
+export const FORM_FIELDS_NAMES = ['firstname', 'lastname', 'email'] as const
+export type FormFieldName = typeof FORM_FIELDS_NAMES[number]
 
-export const phoneInputLabels = [
-  {
-    value: 'home',
-    text: 'Home'
-  },
-  {
-    value: 'work',
-    text: 'Work'
-  },
-  {
-    value: 'mobile',
-    text: 'Mobile'
-  },
-  {
-    value: 'main',
-    text: 'Main'
-  },
-  {
-    value: 'other',
-    text: 'Other',
-  },
-]
+export const PHONE_TYPES = ['home', 'work', 'mobile', 'main', 'other'] as const
 
 export type PhoneType = typeof PHONE_TYPES[number]
 
@@ -30,9 +10,9 @@ export interface Phone {
   number: string
 }
 
-export interface FormPersonal {
-  firstname?: string
-  lastname?: string
-  email?: string
+export type FormPersonal = {
+  firstname: FormFieldName
+  lastname: FormFieldName
+  email: FormFieldName
   phones: Phone[]
 }

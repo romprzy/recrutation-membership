@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import en from './i18n/en'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -58,6 +59,10 @@ export default {
         family: 'Open Sans',
       },
       icons: 'mdi',
+    },
+    lang: {
+      locales: { en },
+      current: 'en'
     },
     theme: {
       dark: false,

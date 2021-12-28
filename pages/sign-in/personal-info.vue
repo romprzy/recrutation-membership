@@ -1,7 +1,7 @@
 <template>
   <BasicCard>
     <VCardTitle class="primary--text text-h4 font-weight-bold">
-      Personal info
+      {{ $vuetify.lang.t('$vuetify.pages.signIn.personalInfo.title') }}
     </VCardTitle>
     <VCardText>
       <FormMembershipPersonal />

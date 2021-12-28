@@ -1,7 +1,7 @@
 <template>
   <BasicCard>
     <VCardTitle>
-      overview
+      {{ $vuetify.lang.t('$vuetify.pages.signIn.overview.title') }}
     </VCardTitle>
     <VCardText>
     </VCardText>
