@@ -17,7 +17,7 @@
         >{{ $vuetify.lang.t('$vuetify.components.close') }}</a>
       </VCardTitle>
       <VCardText>
-        <FormMembershipPersonal>
+        <FormMembershipPersonal save-to-d-b>
           <template v-slot:submit>
             <h3>{{ $vuetify.lang.t('$vuetify.components.forms.membership') }}</h3>
 

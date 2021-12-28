@@ -1,6 +1,6 @@
 <template>
   <v-radio-group
-    v-model="membership"
+    v-model="form.membership"
     v-bind="$attrs"
     v-on="$listeners"
   >
@@ -14,17 +14,33 @@
 </template>
 
 <script>
+import {loadItemFromStorage, saveItemToStorage} from '~/helpers'
+
 export default {
   name: 'MembershipRadio',
   data() {
     return {
-      membership: 'regular',
       types: ['regular', 'premium'],
+      form: {}
     }
+  },
+  created() {
+    if (process.client) {
+      const savedForm = loadItemFromStorage('formMembershipPersonal')
+      // @ts-ignore
+      this.form = savedForm
+    }
+    this.itemsLoaded = true
+  },
+  watch: {
+    form: {
+      deep: true,
+      handler: function() {
+        if(process.client && this.itemsLoaded) {
+          saveItemToStorage('formMembershipPersonal', JSON.stringify(this.form))
+        }
+      },
+    },
   },
 }
 </script>
-
-<style scoped>
-
-</style>

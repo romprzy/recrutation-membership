@@ -93,6 +93,9 @@ interface Data {
 
 export default Vue.extend({
   name: 'FormMembershipPersonal',
+  props: {
+    saveToDB: Boolean,
+  },
   components: {
     InputPhone,
     BasicTextField,
@@ -102,7 +105,6 @@ export default Vue.extend({
   data(): Data {
     return {
       itemsLoaded: false,
-      // TODO: check why ts is not validating
       form: {
         firstname: '',
         lastname: '',
@@ -212,7 +214,7 @@ export default Vue.extend({
         if (!isValid) valid = false
       })
 
-      if (valid) {
+      if (valid && this.saveToDB) {
         this.addUser()
       }
     },
@@ -220,7 +222,7 @@ export default Vue.extend({
       this.$axios.post('http://httpbin.org/post', this.form)
         .then(response => {
           console.log('response', response)
-          this.$router.push({ name: 'sign-in-membership' })
+          this.$router.push({ name: 'success' })
         })
         .catch(error => {
           console.error(error)
